@@ -20,7 +20,8 @@ import stanza.models.classifiers.cnn_classifier as cnn_classifier
 
 class Loss(Enum):
     CROSS = 1
-    LOG_CROSS = 2
+    WEIGHTED_CROSS = 2
+    LOG_CROSS = 3
 
 logger = logging.getLogger('stanza')
 
@@ -352,6 +353,8 @@ def train_model(model, model_file, args, train_set, dev_set, labels):
 
     if args.loss == Loss.CROSS:
         loss_function = nn.CrossEntropyLoss()
+    elif args.loss == Loss.WEIGHTED_CROSS:
+        loss_function = loss.weighted_cross_entropy_loss([label_map[x[0]] for x in train_set], log_dampened=False)
     elif args.loss == Loss.LOG_CROSS:
         loss_function = loss.weighted_cross_entropy_loss([label_map[x[0]] for x in train_set], log_dampened=True)
     else:
