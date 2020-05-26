@@ -2,11 +2,14 @@
 Different loss functions.
 """
 
+import logging
 import numpy as np
 import torch
 import torch.nn as nn
 
 import stanza.models.common.seq2seq_constant as constant
+
+logger = logging.getLogger('stanza')
 
 def SequenceLoss(vocab_size):
     weight = torch.ones(vocab_size)
@@ -27,6 +30,7 @@ def weighted_cross_entropy_loss(labels, log_dampened=False):
     weights = np.sum(weights) / weights
     if log_dampened:
         weights = 1 + np.log(weights)
+    logger.debug("Reweighting cross entropy by {}".format(weights))
     loss = nn.CrossEntropyLoss(
         weight=torch.from_numpy(weights).type('torch.FloatTensor')
     )
