@@ -235,6 +235,7 @@ def download(lang='en', dir=DEFAULT_MODEL_DIR, package='default', processors={},
         logger.info(f'Downloading default packages for language: {lang} ({lang_name})...')
         request_file(f'{url}/{__resources_version__}/{lang}/default.zip', os.path.join(dir, lang, f'default.zip'), md5=resources[lang]['default_md5'])
         unzip(os.path.join(dir, lang), 'default.zip')
+        os.unlink(os.path.join(dir, lang), 'default.zip')
     # Customize: maintain download list
     else:
         download_list = maintain_processor_list(resources, lang, package, processors)
